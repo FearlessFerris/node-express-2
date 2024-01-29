@@ -5,7 +5,7 @@
     - H ( 0 - 11 ) is am || H ( 12 - 23 ) is pm 
 
 */
-const time = '10:10';
+const time1 = '10:10';
 const time2 = '02:27';
 const time3 = '17:59';
 const time4 = '11:31';
@@ -25,13 +25,15 @@ function convertToWords( string ){
     'fifty three', 'fifty four', 'fifty five', 'fifty six', 'fifty seven', 'fifty eight', 'fifty nine' ];
   
   const [ h, m ] = string.split( ':' ).map( Number );
+
+  if( h < 0 || h > 24 || m < 0 || m > 59 ){
+    throw new Error( 'Invalid Time Format' );
+  };
+
   const meridiem = h < 12 ? 'am' : 'pm';
   const twelveHour = h % 12 || 12;
-
   const hWord = hours[ twelveHour ];
   const mWord = minutes[ m ];
-  console.log( hWord );
-  console.log( mWord );
 
   if ( m === 0 ){
     return h === 12 ? 'noon' : 'midnight';
@@ -40,8 +42,12 @@ function convertToWords( string ){
   return `${ hWord } ${ mWord } ${ meridiem }`
 }
 
-convertToWords( time );
+convertToWords( time1 );
 convertToWords( time2 );
 convertToWords( time3 );
 convertToWords( time4 );
 convertToWords( time5 );
+
+
+
+module.exports = convertToWords;
