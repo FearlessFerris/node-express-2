@@ -79,18 +79,39 @@ class User {
    *
    * */
 
-  static async getAll(username, password) {
-    const result = await db.query(
+  // static async getAll(username, password) {
+  //   const result = await db.query(
+  //     `SELECT username,
+  //               first_name,
+  //               last_name,
+  //               email,
+  //               phone
+  //           FROM users 
+  //           ORDER BY username`
+  //   );
+  //   return result.rows;
+  // }
+
+  // Bug : Corrected Version
+  static async getAll() {
+    try{
+      const result = await db.query(
       `SELECT username,
-                first_name,
-                last_name,
-                email,
-                phone
-            FROM users 
-            ORDER BY username`
+            first_name,
+            last_name,
+            email,
+            phone
+        FROM users 
+        ORDER BY username`
     );
-    return result.rows;
-  }
+      return result.rows;
+    }
+    catch( error ){
+        throw error;
+    }
+}
+
+
 
   /** Returns user info: {username, first_name, last_name, email, phone}
    *
@@ -98,6 +119,28 @@ class User {
    *
    **/
 
+  // static async get(username) {
+  //   const result = await db.query(
+  //     `SELECT username,
+  //               first_name,
+  //               last_name,
+  //               email,
+  //               phone
+  //        FROM users
+  //        WHERE username = $1`,
+  //     [username]
+  //   );
+
+  //   const user = result.rows[0];
+
+  //   if (!user) {
+  //     new ExpressError('No such user', 404);
+  //   }
+
+  //   return user;
+  // }
+
+  // Bug: Corrected Function
   static async get(username) {
     const result = await db.query(
       `SELECT username,
@@ -113,11 +156,11 @@ class User {
     const user = result.rows[0];
 
     if (!user) {
-      new ExpressError('No such user', 404);
+      throw new ExpressError('No such user', 404);
     }
 
     return user;
-  }
+  } 
 
   /** Selectively updates user from given data
    *

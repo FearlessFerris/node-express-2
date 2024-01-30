@@ -44,20 +44,38 @@ function requireAdmin(req, res, next) {
  *
  **/
 
-function authUser(req, res, next) {
-  try {
+// function authUser(req, res, next) {
+//   try {
+//     const token = req.body._token || req.query._token;
+//     if (token) {
+//       let payload = jwt.decode(token);
+//       req.curr_username = payload.username;
+//       req.curr_admin = payload.admin;
+//     }
+//     return next();
+//   } catch (err) {
+//     err.status = 401;
+//     return next(err);
+//   }
+// } // end
+
+// Bug: Corrected Function 
+function authUser( req, res, next ){
+  try{
     const token = req.body._token || req.query._token;
-    if (token) {
-      let payload = jwt.decode(token);
+    if( token ){
+      const payload = jwt.verify( token, SECRET_KEY );
       req.curr_username = payload.username;
       req.curr_admin = payload.admin;
     }
-    return next();
-  } catch (err) {
-    err.status = 401;
-    return next(err);
   }
-} // end
+  catch( error ){
+    err.status = 401;
+    return next( error );
+  }
+}
+
+
 
 module.exports = {
   requireLogin,

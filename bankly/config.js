@@ -12,6 +12,7 @@ const DB_URI =
   process.env.NODE_ENV === 'test'
     ? 'postgresql:///bankly_test'
     : 'postgresql:///bankly';
+  
 
 module.exports = {
   BCRYPT_WORK_FACTOR,

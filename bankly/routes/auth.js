@@ -35,15 +35,27 @@ router.post('/register', async function(req, res, next) {
  *
  */
 
+// router.post('/login', async function(req, res, next) {
+//   try {
+//     const { username, password } = req.body;
+//     let user = User.authenticate(username, password);
+//     const token = createTokenForUser(username, user.admin);
+//     return res.json({ token });
+//   } catch (err) {
+//     return next(err);
+//   }
+// }); // end
+
+// Bug: Corrected Route
 router.post('/login', async function(req, res, next) {
   try {
-    const { username, password } = req.body;
-    let user = User.authenticate(username, password);
-    const token = createTokenForUser(username, user.admin);
-    return res.json({ token });
-  } catch (err) {
-    return next(err);
-  }
+      const { username, password } = req.body;
+      let user = await User.authenticate(username, password);
+      const token = createTokenForUser(username, user.admin);
+      return res.json({ token });
+} catch (err) {
+  return next(err);
+}
 }); // end
 
 module.exports = router;
