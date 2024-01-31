@@ -97,6 +97,34 @@ Bug 4
 
 Bug 5
 
+    For this bug, it is more of a logic error within the code. The docstrings for this code says that 
+    this route should be avaliable for admins as well as the user who's profile it involves. The problem
+    is that the requiredAdmin middleware is running inside of the route of the view function. We need to
+    get rid of this otherwise users with normal access who are not admins will not be able to utilize this 
+    functionality.
+
+    Correction: 
+    router.patch('/:username', authUser, requireLogin, async function(
+        req,
+        res,
+        next
+    ){
+    try {
+        if (!req.curr_admin && req.curr_username !== req.params.username) {
+            throw new ExpressError('Only  that user or admin can edit a user.', 401);
+        }
+
+        // get fields to change; remove token so we don't try to change it
+        let fields = { ...req.body };
+        delete fields._token;
+
+        let user = await User.update(req.params.username, fields);
+        return res.json({ user });
+    } catch (err) {
+        return next(err);
+    }
+    }); // end
+
     
 
 
